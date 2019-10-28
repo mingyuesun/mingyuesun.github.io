@@ -5,9 +5,9 @@ header-img: img/post-bg-desk.jpg
 email: smy_cating@qq.com
 description: "卑鄙是卑鄙者的通行证，高尚是高尚者的墓志铭."
 keyword: "SMY Blog, 孙明月的博客, sunmingyue, 孙明月, 前端"
-url: "http://mingyuesun.github.io"          # your host, for absolute URL
+url: "http://smy0916.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
-github_repo: "https://github.com/MingyueSun/MingyueSun.github.io.git" # you code repository
+github_repo: "https://github.com/smy0916/smy0916.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
@@ -20,7 +20,7 @@ sidebar-avatar: /img/avatar_g.jpg      # use absolute URL, seeing it's used in b
 RSS: false
 # weibo_username:     5016433196
 # zhihu_username:     luo-su-meng
-github_username:    MingyueSun
+github_username:    smy0916
 # facebook_username:  
 # jianshu_username:   81c007afb604
 # twitter_username:   
@@ -65,9 +65,9 @@ gitalk:
   enable: false    #是否开启Gitalk评论
   clientID: a3d324a936efbf25bf6d                            #生成的clientID
   clientSecret: 17c0e125d749107d52783b4151b69a73a248f267    #生成的clientSecret
-  repo: MingyueSun/MingyueSun.github.io    #仓库名称
-  owner: MingyueSun    #github用户名
-  admin: MingyueSun
+  repo: smy0916/smy0916.github.io    #仓库名称
+  owner: smy0916    #github用户名
+  admin: smy0916
   distractionFreeMode: false #是否启用类似FB的阴影遮罩
   id: 'window.location.pathname'
 
