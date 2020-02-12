@@ -5,9 +5,9 @@ header-img: img/post-bg-desk.jpg
 email: smy_cating@foxmail.com
 description: "卑鄙是卑鄙者的通行证，高尚是高尚者的墓志铭."
 keyword: "SMY Blog, 孙明月的博客, sunmingyue, 孙明月, 前端"
-url: "http://smy0916.github.io"          # your host, for absolute URL
+url: "http://smy.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
-github_repo: "https://github.com/smy0916/smy0916.github.io.git" # you code repository
+github_repo: "https://github.com/mingyuesun/smy.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
@@ -20,7 +20,7 @@ sidebar-avatar: /img/avatar_g.jpg      # use absolute URL, seeing it's used in b
 RSS: false
 # weibo_username:     5016433196
 # zhihu_username:     luo-su-meng
-github_username:    smy0916
+github_username:   mingyuesun
 # facebook_username:  
 # jianshu_username:   81c007afb604
 # twitter_username:   
