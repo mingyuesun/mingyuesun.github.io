@@ -1,0 +1,192 @@
+I"�<p>1.输出结果</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>console.log(null == undefined) // true
+console.log(null == '') // false
+console.log(null == false) // false
+console.log(false == '') // false
+console.log([] == ![]) // true
+
+var func = (function(a) {
+    /*
+    *  1.第一次 a = 1 为匿名函数的返回值
+    *  this =&gt; window =&gt; window.a = 1
+    *  2.第二次 a = 4 为全局调用方法时传递的参数 4
+    *  this =&gt; window
+    *  this.a = window.a = 1
+    *  a += this.a =&gt; 4 += 1
+    *  return a // 5
+    */
+	this.a = a
+	return function(a) {
+		a += this.a
+		return a
+	}
+})(function(a, b){
+	return a
+}(1, 2))
+
+console.log(func(4)) // 5
+
+/*
+ * 
+ *
+*/
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var a = 1
+if (!b in window) {
+	a += 1
+	var b = 4
+}
+
+console.log(a) // 1
+console.log(b)  // undefined
+
+/*
+*  b 变量提升 =&gt;
+*  var a = 1;
+*  var b;
+*  b === window.b =&gt; b in window // true
+*  所以 if 条件不成立
+*/
+</code></pre></div></div>
+
+<p>2.html5有哪些新特性、移除了那些元素？如何处理HTML5新标签的浏览器兼容问题？如何区分 HTML 和 HTML5？</p>
+
+<h5 id="新特性">新特性</h5>
+
+<ul>
+  <li>
+    <p>HTML5 现在已经不是 SGML 的子集，主要是关于图像，位置，存储，多任务等功能的增加。</p>
+  </li>
+  <li>拖拽释放(Drag and drop) API 
+语义化更好的内容标签（header,nav,footer,aside,article,section）</li>
+  <li>音频、视频API(audio,video)</li>
+  <li>画布(Canvas) API</li>
+  <li>地理(Geolocation) API</li>
+  <li>本地离线存储 localStorage，长期存储数据，浏览器关闭后数据不丢失；sessionStorage 的数据在浏览器关闭后自动删除</li>
+  <li>表单控件，calendar、date、time、email、url、search 
+新的技术webworker, websocket, Geolocation</li>
+</ul>
+
+<h5 id="移除的元素">移除的元素</h5>
+
+<ul>
+  <li>
+    <p>纯表现的元素：basefont，big，center，font, s，strike，tt，u；</p>
+  </li>
+  <li>
+    <p>对可用性产生负面影响的元素：frame，frameset，noframes；</p>
+  </li>
+</ul>
+
+<h5 id="支持html5新标签">支持HTML5新标签：</h5>
+
+<p>IE8/IE7/IE6支持通过document.createElement方法产生的标签，可以利用这一特性让这些浏览器支持HTML5新标签，浏览器支持新标签后，还需要添加标签默认的样式，当然最好的方式是直接使用成熟的框架、使用最多的是html5shim框架</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!--[if lt IE 9]&gt; 
+&lt;script&gt; src="http://html5shim.googlecode.com/svn/trunk/html5.js"&lt;/script&gt; 
+&lt;![endif]--&gt; 
+</code></pre></div></div>
+
+<h5 id="如何区分-doctype声明新增的结构元素功能元素">如何区分： DOCTYPE声明\新增的结构元素\功能元素</h5>
+
+<p>3.水平垂直居中一个元素</p>
+
+<p>4.移除字符串”https://www.google.com?pn=0”中pn为0的属性.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> var str = 'https:\/\/www.google.com?pn=0'
+ function deleteAttr(str) {
+  var arr = str.split("?")
+  var back_str
+  if (arr[1].indexOf("&amp;") === -1) {
+    back_str = arr[0]      
+  } else {
+    var params = arr[1].split("&amp;")
+    back_str = arr[0] + "?" + params.filter(item =&gt; item !== 'pn=0').join("&amp;")
+  }
+  
+  return back_str    
+ }
+</code></pre></div></div>
+
+<p>5.随机生成10个1-100间的数字，去重之后返回最大值</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var arr = []
+for (var i = 0; i &lt; 10; i++) {
+  arr.push(Math.floor(Math.random() * 100))    
+}
+
+arr = [...new Set(arr)]
+console.log(Math.max(...arr))
+</code></pre></div></div>
+
+<p>6.position的值有哪些？分别相对于谁？</p>
+
+<ul>
+  <li>static : 该关键字指定元素使用正常的布局行为，即元素在文档常规流中当前的布局位置。此时 top, right, bottom, left 和 z-index 属性无效。</li>
+  <li>relative: 该关键字下，元素先放置在未添加定位时的位置，再在不改变页面布局的前提下调整元素位置（因此会在此元素未添加定位时所在位置留下空白）。元素依然在普通流中。position:relative 对 table-*-group, table-row, table-column, table-cell, table-caption 元素无效。</li>
+  <li>absolute: 不为元素预留空间，通过指定元素相对于最近的非 static 定位祖先元素的偏移，来确定元素位置。绝对定位的元素可以设置外边距（margin），且不会与其他边距合并。</li>
+  <li>fixed: 不为元素预留空间，而是通过指定元素相对于屏幕视口（viewport）的位置来指定元素位置。元素的位置在屏幕滚动时不会改变。打印时，元素会出现在每页的固定位置。fixed 属性会创建新的层叠上下文。当元素祖先的 transform  属性非 none 时，容器由视口改为该祖先。</li>
+  <li>sticky: 盒位置根据正常流计算(这称为正常流动中的位置)，然后相对于该元素在流中的 flow root（BFC）和 containing block（最近的块级祖先元素）定位。在所有情况下（即便被定位元素为 table 时），该元素定位均不对后续元素造成影响。当元素 B 被粘性定位时，后续元素的位置仍按照 B 未定位时的位置来确定。position: sticky 对 table 元素的效果与 position: relative 相同。</li>
+</ul>
+
+<p><strong>当一个元素的 position 值为 absolute 或 fixed 的时候，会发生三件事：</strong></p>
+
+<ol>
+  <li>
+    <p>把该元素往 Z 轴方向移了一层，元素脱离了普通流，所以不再占据原来那层的空间，还会覆盖下层的元素。</p>
+  </li>
+  <li>
+    <p>该元素将变为块级元素，相当于给该元素设置了 display: block;（给一个内联元素，如 <span> ，设置 absolute 之后发现它可以设置宽高了）。</span></p>
+  </li>
+  <li>
+    <p>如果该元素是块级元素，元素的宽度由原来的 width: 100%（占据一行），变为了 auto。</p>
+  </li>
+</ol>
+
+<blockquote>
+  <p>由此观之，当 position 设置为 absolute 或 fixed，就没必要设置 display 为 block 了。而且如果你不想覆盖下层的元素，可以设置 z-index 值 达到效果。</p>
+</blockquote>
+
+<p>7.css优化</p>
+
+<ul>
+  <li>异步加载CSS</li>
+  <li>使用preload，比使用不匹配的media方法能够更早地开始加载CSS
+ ```</li>
+</ul>
+<link rel="preload" href="styles.css" as="style" onload="this.rel='stylesheet'" />
+
+<p>```</p>
+<blockquote>
+  <p>注意，as是必须的。忽略as属性，或者错误的as属性会使preload等同于XHR请求，浏览器不知道加载的是什么内容，因此此类资源加载优先级会非常低。as的可选值可以参考标准文档。</p>
+</blockquote>
+
+<ul>
+  <li>文件压缩</li>
+  <li>去除无用CSS
+    <blockquote>
+      <ol>
+        <li>有选择地使用选择器 (a.保持简单，不要使用嵌套过多过于复杂的选择器。
+ b.通配符和属性选择器效率最低，需要匹配的元素最多，尽量避免使用。c.不要使用类选择器和ID选择器修饰元素标签，如h3#markdown-content，这样多此一举，还会降低效率。d.不要为了追求速度而放弃可读性与可维护性。)</li>
+        <li>减少使用昂贵的属性 (如：box-shadow/border-radius/filter/透明度/:nth-child等。)</li>
+        <li>优化重排与重绘(a.改变font-size和font-family; b.改变元素的内外边距;c.通过JS改变CSS类;d.通过JS获取DOM元素的位置相关属性（如width/height/left等）;e.CSS伪类激活;
+f.滚动滚动条或者改变窗口大小)</li>
+        <li>不要使用@import</li>
+      </ol>
+    </blockquote>
+  </li>
+</ul>
+
+<p>8.从输入url到页面展示发生了什么 www.baidu.com</p>
+
+<ul>
+  <li>DNS查询</li>
+  <li>向服务器发起TCP链接</li>
+  <li>向服务器发送请求</li>
+  <li>服务器返回请求</li>
+  <li>浏览器解析文档并渲染页面</li>
+  <li>关闭链接</li>
+</ul>
+
+:ET

@@ -1,0 +1,106 @@
+I"�<h4 id="概览">概览：</h4>
+<h3 id="一随机浮点数的生成">一、随机浮点数的生成</h3>
+<h3 id="二随机整数的生成">二、随机整数的生成</h3>
+<h3 id="三随机字符串的生成">三、随机字符串的生成</h3>
+
+<h2 id="一随机浮点数的生成-1">一、随机浮点数的生成</h2>
+
+<ol>
+  <li>生成 [ 0, 1 ) 范围内的随机数（大于等于0，小于1）</li>
+</ol>
+
+<blockquote>
+  <p>使用 random() 方法可以返回一个介于 0 ~ 1 之间的伪随机数（包括 0，不包括 1）。</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Math.random()
+</code></pre></div></div>
+
+<ol>
+  <li>生成 [ n, m ) 范围内的随机数（大于等于n，小于m）</li>
+</ol>
+
+<blockquote>
+  <p>这种最简单，因为和 random 的特点保持一致。只需使用如下公式即可</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Math.random()*(m-n) + n
+</code></pre></div></div>
+
+<ol>
+  <li>生成 [n,m]、(n,m)、(n,m] 范围内的随机数</li>
+</ol>
+
+<p>因为 random 的特点，要取得这几个区间内的浮点数稍微麻烦些，需要借助一些判断才能满足要求。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  //取得[n,m]范围随机数
+function fullClose(n,m) {
+   var result = Math.random()*(m+1-n)+n;
+   while(result&gt;m) {
+       result = Math.random()*(m+1-n)+n;
+   }
+   return result;
+}
+ 
+//取得(n,m)范围随机数
+function fullOpen(n,m) {
+   var result = Math.random()*(m-n)+n;
+   while(result == n) {
+       result = Math.random()*(m-n)+n;
+   }
+   return result;
+}
+ 
+//取得(n,m]范围随机数
+function leftOpen(n,m) {
+   var result = Math.random()*(m-n+1)+n-1;
+   while(result&lt;n) {
+       result = Math.random()*(m-n+1)+n-1;
+   }
+   return result;
+}
+</code></pre></div></div>
+
+<h2 id="二随机整数的生成-1">二、随机整数的生成</h2>
+
+<blockquote>
+  <p>要生成随机整数，我们还需要借助如下两个方法：</p>
+  <ul>
+    <li>Math.round(num)：将 num 四舍五入取整</li>
+    <li>Math.floor(num)：将 num 向下取整，即返回 num 的整数部分。当然我们也可以使用 parseInt() 方法代替。</li>
+  </ul>
+</blockquote>
+
+<ol>
+  <li>随机生成 0、1 这两个整数
+    <blockquote>
+      <p>下面这个方法可以随机获取 0 或 1，它们获取到的几率是比较均衡的。</p>
+    </blockquote>
+  </li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Math.round(Math.random)
+</code></pre></div></div>
+
+<ol>
+  <li>生成 [ 0, n ) 范围内的随机整数（大于等于0，小于n）</li>
+</ol>
+
+<blockquote>
+  <p>下面方法生成一个 0 到 n-1 的随机整数（这 n 个数获取几率都是均衡的）</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Math.floor(Math.random()*n)
+</code></pre></div></div>
+
+<ol>
+  <li>生成 [ 1, n ] 范围内的随机整数（大于等于1，小于等于n）</li>
+</ol>
+
+<blockquote>
+  <p>下面方法生成一个 1 到 n 的随机整数（这 n 个数获取几率都是均衡的）</p>
+</blockquote>
+
+<p>```
+ Math.floor(Math.random()*n) + 1</p>
+:ET
