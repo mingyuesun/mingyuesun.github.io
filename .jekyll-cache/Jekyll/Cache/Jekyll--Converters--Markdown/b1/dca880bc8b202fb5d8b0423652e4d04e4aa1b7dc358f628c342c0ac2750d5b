@@ -1,0 +1,137 @@
+I"F<p>当一个项目需要包含其他支持项目源码时使用的功能，作用是两个项目是独立的，且主项目可以使用另一个支持项目。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule add &lt;submodule_url&gt;   # 添加子项目
+  ex: git submodule add git@gitlab.com:stardust.ai/shared_models.git
+</code></pre></div></div>
+
+<blockquote>
+  <p>添加子项目后会出现.gitmodules的文件，这是一个配置文件，记录mapping between the project’s URL and the local subdirectory。且.gitmodules在git版本控制中，这样其他参与项目的人才能知道submodule projects的情况。</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule init  # 初始化本地.gitmodules文件
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule update  # 同步远端submodule源码
+</code></pre></div></div>
+
+<blockquote>
+  <p>如果获取的项目包含submodules，pull main project的时候不会同时获取submodules的源码，需要执行本地.gitmodules初始化的命令，再同步远端submodule源码。如果希望clone main project的时候包含所有submodules，可以使用下面的命令</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git clone --recurse-submodules &lt;main_project_url&gt;
+</code></pre></div></div>
+
+<ul>
+  <li>获取主项目和所有子项目源码
+操作submodules源码：先进入submodule的direcotry，再执行下述命令</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git fetch  # 获取submodule远端源码
+
+$ git merge origin/&lt;branch_name&gt;  # 合并submodule远端源码
+
+$ git pull  # 获取submodule远端源码合并到当前分支
+
+$ git checkout &lt;branch_name&gt;  # 切换submodule的branch
+
+$ git commit -am "change_summary"  # 提交submodule的commit
+</code></pre></div></div>
+
+<h2 id="or">or</h2>
+
+<ul>
+  <li>更新submodule源码，默认更新的branch是master，如果要修改branch，在.gitmodule中设置
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule update --remote &lt;submodule_name&gt;  
+</code></pre></div>    </div>
+  </li>
+  <li>更新所有submodule源码，默认更新.gitmodule中设置的跟踪分支，未设置则跟踪master
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule update --remote  
+</code></pre></div>    </div>
+  </li>
+  <li>当submodule commits提交有问题的时候放弃整个push
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git push --recurse-submodules=check
+</code></pre></div>    </div>
+  </li>
+  <li>分开提交submodule和main project
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git push --recurse-submodules=on-demand
+</code></pre></div>    </div>
+  </li>
+  <li>.gitmodule内容大致如下
+    <div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nv">submodule &lt;submodule_name&gt;</span><span class="p">]</span>
+  path = <span class="nt">&lt;local</span><span class="na">_directory</span><span class="nt">&gt;</span>
+  url = <span class="nt">&lt;remote</span><span class="na">_url</span><span class="nt">&gt;</span>
+  branch = <span class="nt">&lt;remote</span><span class="na">_update_branch_name</span><span class="nt">&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>用’foreach’关键字同时管理多个submodules，如下</p>
+  </li>
+  <li>stash所有submodules
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule foreach 'git stash'
+</code></pre></div>    </div>
+  </li>
+  <li>所有submodules创建新分支
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git submodule foreach 'git checkout -b &lt;branch_name&gt;'
+</code></pre></div>    </div>
+  </li>
+  <li>submodules的命令很长，为提升效率，可以创建alias，记录在.git/config路径下。如下：
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git config alias.spush 'push --recurse-submodules=on-demand'
+$ git config alias.supdate 'submodule update --remote --merge'
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>这样，可以使用下面的命令来提高效率</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git supdate
+$ git spush
+</code></pre></div></div>
+
+<p>一次性Clone项目和Submodules</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git clone --recursive /path/to/repos/foo.git
+</code></pre></div></div>
+
+<p>移除submodule</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1、删除git cache和物理文件夹
+$ git rm -r --cached libs/
+$ rm -rf libs
+
+2、删除.gitmodules的内容（或者整个文件）
+$ rm .gitmodules
+
+如果仅仅删除某一个submodule那么打开.gitmodules文件编辑，删除对应submodule配置即可。
+
+3、删除.git/config的submodule配置
+
+源文件：
+&lt;pre&gt;[core]
+    repositoryformatversion = 0 
+    filemode = true
+    bare = false
+    logallrefupdates = true
+[remote "origin"]
+    fetch = +refs/heads/*:refs/remotes/origin/*
+    url = /home/henryyan/submd/ws/../repos/project1.git
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+[submodule "libs/lib1"]
+    url = /home/henryyan/submd/repos/lib1.git
+[submodule "libs/lib2"]
+    url = /home/henryyan/submd/repos/lib2.git
+&lt;/pre&gt;
+ 
+删除后：
+&lt;pre&gt;[core]
+    repositoryformatversion = 0 
+    filemode = true
+    bare = false
+    logallrefupdates = true
+[remote "origin"]
+    fetch = +refs/heads/*:refs/remotes/origin/*
+    url = /home/henryyan/submd/ws/../repos/project1.git
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+&lt;/pre&gt;
+</code></pre></div></div>
+:ET

@@ -1,0 +1,143 @@
+I"4<h3 id="常用的git指令">常用的git指令</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+$ git fetch main feature/upload_audio https://github.com/callzhang/stardust_server
+* branch              feature/upload_audio -&gt; FETCH_HEAD
+* [new branch]        feature/upload_audio -&gt; main/feature/upload_audio
+
+/* 已经完成fetch并保存在临时分支 FETCH_HEAD */
+$ git merge main/feature/upload_audio.
+
+/* 将远程最新的feature/upload_audio分支代码合并到本地 */
+$ feature/upload_audio  
+
+/* 将本地最新的分支更新到远端 */
+git push origin feature/upload_audio
+
+</code></pre></div></div>
+
+<h3 id="about-git-rebase">About git-rebase</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+/* 当dev分支出现需要rebase时 */
+
+$ git checkout master
+
+$ git pull origin master
+
+$ git checkout dev
+
+$ git rebase master
+
+$ git push origin dev -f
+
+/* 线上代码approved后即可自动merge */
+
+</code></pre></div></div>
+
+<h3 id="删除分支操作">删除分支操作</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/* 删除本地分支 */
+$ git branch -D &lt;branchName&gt; 
+
+/* 删除远程分支 */ 
+$ git push origin --delete &lt;bracnhName&gt;  
+
+$ git branch -d -r origin/&lt;branchName&gt;
+
+/* 推送一个空分支到远程分支 */ 
+$ git push origin : &lt;branchName&gt; 
+
+/* 删除远程tag */ 
+$ git push origin --delete tag &lt;tagName&gt; 
+
+/* 删除本地tag */ 
+$ git tag -d &lt;tagName&gt; 
+
+/* 推送一个空tag到远程tag */ 
+$ git push origin: refs/tags/&lt;tagName&gt; 
+
+/* 删除与远程分支不对应的本地分支 */ 
+$ git remote prune origin 
+
+/* 删除掉没有与远程分支对应的本地分支 */ 
+$ git fetch -p 
+
+/* 向远程推送本地新建的分支(远端无此分支) */ 
+$ git push origin &lt;originBranchName&gt;:&lt;localBranchName&gt;
+
+</code></pre></div></div>
+
+<blockquote>
+  <ul>
+    <li>Question: fatal:refusing to merge unrelated history</li>
+    <li>Answer:
+      <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git pull origin branch &gt; --allow-unrelated-histories 
+</code></pre></div>      </div>
+    </li>
+  </ul>
+</blockquote>
+
+<h3 id="查看删除的相关内容">查看删除的相关内容</h3>
+
+<p>git clean -f -n 查看可以被删除的untracked files</p>
+
+<p>git clean -f 删除untracked files</p>
+
+<blockquote>
+  <p>If you want to also remove directories, run git clean -f -d or git clean -fd
+If you just want to remove ignored files, rungit clean -f -X or git clean -fX
+If you want to remove ignored as well as non-ignored files, run git clean -f -x or git clean -fx</p>
+</blockquote>
+
+<h3 id="about-modify-branch">about modify branch</h3>
+
+<ul>
+  <li>修改本地分支名称</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git branch -m oldName newName 
+</code></pre></div></div>
+
+<ul>
+  <li>把修改后的本地分支与远程分支关联</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git branch --set-upstream-to origin/newName 
+</code></pre></div></div>
+
+<h3 id="about-modify-commit">about modify commit</h3>
+
+<ul>
+  <li>修改本地commit message</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git commit --amend 
+</code></pre></div></div>
+
+<h3 id="about-delete-a-commit-in-branch">about delete a commit in branch</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*
+ * commit_id：想要删除的commit_id
+ * ^: 表示。。。之前的意思
+ * 如果commit_id之后还存在commit_id,那么加上^符号后，
+ * 会在vim中展示commit_id 及其之后 的 commit_id,
+ * 然后就可以直接删除某行commit_id了。由于删除了中间的一个commit_id,
+ * 后面的commit不会受到影响，但是会生成新的commit_id，
+ * 所以在与其他分支merge时，就相当于
+ * 产生了新的commit,但其内容与之前commit修改的相同。
+ * 等同于，git reset --hard &lt;commit_id想要删除的commit前一个commit_id&gt;，
+ * 然后再重新cherry-pick &lt;commit_id想要删除的commit_id后面新加的commit_id&gt;
+*/ 
+
+$ git rebase -i &lt;commit_id&gt;^
+
+</code></pre></div></div>
+
+<h3 id="git基于历史commit-id检出代码并创建新的分支">git基于历史commit ID检出代码并创建新的分支</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+$ git checkout -b new_branch_name history_commit_id
+
+</code></pre></div></div>
+
+:ET
