@@ -1,0 +1,101 @@
+I"W!<h2 id="题目">题目</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">?</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">ok!</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="解析">解析</h2>
+
+<p>== 进行比较的时候，如果左右两边数据类型不一样，则先转换为相同的数据类型，再进行比较。</p>
+
+<ol>
+  <li>{} == {}: 两个对象进行比较，比较的是的内存地址</li>
+  <li>null == undefined 相等; null === undefined 不相等</li>
+  <li>NaN == NaN 不相等，NaN 和谁都不相等</li>
+  <li>[12] == “12”: 对象和字符串比较，是把对象 toString() 转换为字符串后再比较</li>
+  <li>剩余所有情况在比较时都是转换为数字（前提数据类型不一样）:
+    <ul>
+      <li>对象转数字：先转换为字符串，再转换为数字</li>
+      <li>字符串转数字：只要出现一个非数字字符，就是 NaN</li>
+      <li>null 转数字：0</li>
+      <li>undefined 转数字：NaN</li>
+      <li>布尔值转数字：true =&gt; 1  false =&gt; 0</li>
+    </ul>
+  </li>
+</ol>
+
+<p>对照上述规则：只有 <strong>对象与数字比较先把 <code class="highlighter-rouge">对象.toString()</code> 转换为字符串，然后再转换为数字</strong> 符合题目要求。</p>
+
+<h2 id="方法">方法</h2>
+
+<h3 id="1类型转换时的劫持">1.类型转换时的劫持</h3>
+
+<h4 id="转换为原始类型">转换为原始类型</h4>
+
+<p>对象在转换类型的时候，会执行原生方法 <code class="highlighter-rouge">ToPrimitive</code>。</p>
+
+<p>其算法如下：</p>
+
+<ol>
+  <li>如果已经是 <strong>原始类型</strong>，则返回当前值；</li>
+  <li>如果需要转换为 <strong>字符串</strong>，则先调用 <code class="highlighter-rouge">toString</code> 方法，如果此时是 <strong>原始类型</strong> 则直接返回，否则再调用 <code class="highlighter-rouge">valueOf</code> 方法并返回结果；</li>
+  <li>如果不是 <strong>字符串</strong>, 则先调用 <code class="highlighter-rouge">valueOf</code> 方法，如果此时是 <strong>原始类型</strong> 则直接返回，否则再调用 <code class="highlighter-rouge">toString</code> 方法并返回结果；</li>
+  <li>如果都没有 <strong>原始类型</strong> 返回，则抛出 <strong>TypeError</strong> 类型错误。</li>
+</ol>
+
+<p>所以：</p>
+
+<pre><code class="language-js ">let a = {
+  val: [3, 2, 1],
+  valueOf(){
+    return this.val.pop()
+  }
+}
+
+if (a == 1 &amp;&amp; a == 2 &amp;&amp; a == 3) {
+  console.log("Type conversion is ok!")
+}
+</code></pre>
+
+<h3 id="2-对--getter-进行劫持">2. 对 ` getter` 进行劫持</h3>
+
+<p><code class="highlighter-rouge">getter</code> 就是对象属性在进行查询时会被调用的方法 <code class="highlighter-rouge">get</code>，可以利用 <code class="highlighter-rouge">Proxy</code> 修改 <code class="highlighter-rouge">get</code> 的默认行为可以实现题目功能，也可以利用 <code class="highlighter-rouge">Object.defineProperty(..)</code> 方法的第三个参数 <code class="highlighter-rouge">descriptor</code> 更改 <code class="highlighter-rouge">get</code> 的默认行为实现题目功能。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// proxy</span>
+<span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Proxy</span><span class="p">({},</span> <span class="p">{</span>
+  <span class="na">value</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="kd">get</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="o">++</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Proxy is ok!</span><span class="dl">"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Object.defineProperty()</span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="kd">get</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="p">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="o">++</span> <span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+</code></pre></div></div>
+
+<h3 id="3--正则表达式">3.  正则表达式</h3>
+
+<p><code class="highlighter-rouge">JS</code> 中的 <code class="highlighter-rouge">RegExp.property.exec()</code> 方法作用是在一个指定字符串中执行一个搜索匹配，返回一个为数组或 <code class="highlighter-rouge">null</code>。当正则表达式使用 <code class="highlighter-rouge">g</code> 标志时，<code class="highlighter-rouge">RegExp</code> 对象是 <strong>有状态</strong> 的。他们会将上次成功匹配后的位置记录在 <code class="highlighter-rouge">lastIndex</code> 属性中。使用此特性，<code class="highlighter-rouge">exec()</code> 可用来对单个字符串中的多次匹配结果进行逐条的遍历（包括捕获到的匹配）。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">reg</span><span class="p">:</span> <span class="sr">/</span><span class="se">\d</span><span class="sr">/g</span><span class="p">,</span>
+  <span class="nx">valueOf</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reg</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="mi">123</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">a</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">RegExp is ok!</span><span class="dl">"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+:ET
