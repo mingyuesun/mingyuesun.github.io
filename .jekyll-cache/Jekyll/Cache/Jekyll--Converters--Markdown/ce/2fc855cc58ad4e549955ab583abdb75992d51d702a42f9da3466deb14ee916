@@ -1,0 +1,60 @@
+I"J
+<h2 id="web前端性能优化原理问题">Web前端性能优化原理问题🎁</h2>
+
+<p><strong>前端性能优化：</strong></p>
+<ul>
+  <li>资源的合并与压缩；
+    <ul>
+      <li>图片编码的原理，以及类型的选择；</li>
+      <li>浏览器的渲染机制；</li>
+      <li>懒加载；</li>
+      <li>预加载；</li>
+      <li>浏览器存储；</li>
+      <li>缓存机制；- PWA；</li>
+      <li>VUE-SSR 等。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>技术栈，Vue.js 和 Chrome，调试工具 performance 和 layers。那么什么是前端性能优化原理的点，涉及作用以及原理，如何与真实的项目场景结合，理论结合实战经验，进行量化分析。</p>
+
+<p>前端优化，一般是先<strong>基础优化</strong>（图片编码原理等问题），高一点即为<strong>进阶优化</strong>（浏览器的渲染机制，浏览器的存储，优化），结合服务端进行优化（首屏渲染问题）等。</p>
+
+<p><strong>前端性能优化方案：</strong></p>
+<ul>
+  <li>最小化 HTTP 的请求，使用内容交付网络；
+    <ul>
+      <li>避免 src 或是 href；</li>
+      <li>添加过期或者是缓存控制标头；</li>
+      <li>gzip 组件；</li>
+      <li>将 styleSheets 放在顶部，将脚本放在最下面，避免 css 表达式，减少 dns 的查找；</li>
+      <li>将 js 和 css 设置为外部，避免重定向；</li>
+      <li>配置 etag；</li>
+      <li>使用 ajax 缓存；</li>
+      <li>减少 dom 元素的数量；</li>
+      <li>没有404；</li>
+      <li>减少 cookie 的大小；</li>
+      <li>不缩放 HTML 中的图像；</li>
+      <li>避免使用过滤器；</li>
+      <li>使用 favicon.icon 小型且可缓存等。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>提问：</strong></p>
+<ul>
+  <li>为什么要进行前端优化？
+    <ul>
+      <li>图片再前端是如何解码的？</li>
+      <li>浏览器渲染加载的过程是如何进行的？</li>
+      <li>懒加载和预加载的原理是什么样的？</li>
+      <li>懒加载和预加载的应用场景是什么样的？</li>
+      <li>PWA 和 VUE-SSR 等原理是怎么样的？</li>
+    </ul>
+  </li>
+</ul>
+
+<p>影响前端性能的有<em>图像</em>、<em>样式表</em>、<em>脚本</em>、<em>flash</em>等，<em>减少组件的数量</em>、<em>减少所需的 HTTP 请求数量</em>等，即可加快页面的速度。</p>
+
+<p><a href="https://mmbiz.qpic.cn/mmbiz_png/3aPj0GhFQDAWdsHXtjcRcY6ue7sZoOXMoYvYiciatUEkw8aTicBFvspU618bCicDEnI9TEumu4pjJPgLrp0KWjpOGg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">img</a></p>
+:ET
