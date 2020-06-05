@@ -11,8 +11,8 @@ github_repo: "https://github.com/mingyuesun/smy.github.io.git" # you code reposi
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "卑鄙是卑鄙者的通行证，高尚是高尚者的墓志铭."
-sidebar-avatar: /img/avatar_g.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-about-description: "你要怀揣着梦想啊！"
+sidebar-avatar: /img/avatar_3.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
